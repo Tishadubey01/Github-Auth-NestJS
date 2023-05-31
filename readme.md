@@ -15,27 +15,27 @@ This is a simple NestJS application that integrates with Github's API. It allows
 ## Installation
 
 ```bash
-$ npm install -g @nestjs/cli
+ npm install -g @nestjs/cli
 ```
 ### Dependencies 
 ```bash
-$ npm install @nestjs/config
-$ npm install passport @nestjs/passport passport-github
-$ npm install passport-jwt
-$ npm install @nestjs/jwt
+ npm install @nestjs/config
+ npm install passport @nestjs/passport passport-github
+ npm install passport-jwt
+ npm install @nestjs/jwt
 ```
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+ npm run start
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+ npm run test
 ```
  
 ## API Documentation
