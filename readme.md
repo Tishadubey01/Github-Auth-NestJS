@@ -81,6 +81,10 @@ The application uses the Github OAuth App flow to authenticate users. The applic
 
 
 
+## Demo
+
+https://github.com/Tishadubey01/Github-Auth-NestJS/assets/76221139/e7237360-a53a-4192-b878-53016a942b10
+
 
 
 
