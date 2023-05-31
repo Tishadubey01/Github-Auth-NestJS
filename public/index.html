@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Login</title>
+</head>
+<style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+   
+  background-color: #bb9ec0;
+
+  }
+  h1 {
+    font-size: 70px;
+  font-weight: 600;
+  background-image: linear-gradient(to bottom left, #553c9a, #ee4b2b);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(179, 147, 211, 0.1),
+               3px 4px 4px rgba(179, 147, 211, 0.15),
+               4px 6px 4px rgba(179, 147, 211, 0.2),
+               5px 8px 4px rgab(179, 147, 211, 0.25);
+
+
+  }
+ 
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    
+    
+    
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 150px;
+    height: 50px;
+    
+   
+    font-weight: bold;
+    
+    transition: all 0.3s ease;
+    position: relative;
+    
+    outline: none;
+    border-radius: 5px;
+    z-index: 0;
+    background: rgb(191, 54, 141);
+    overflow: hidden;
+    border: 2px solid green;
+    color: black;
+  }
+  button:hover {
+    background-color: #eee;
+  }
+</style>
+<body>
+  <h1>GitHub Login </h1>
+  <button onclick="login()">Login with GitHub</button>
+
+  <script>
+    function login() {
+      // Redirect the user to the GitHub login page
+      window.location.href = '/auth';
+    }
+
+    // Check if an access token is present in the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('access_token');
+    if (accessToken) {
+      // Save the access token in localStorage
+      localStorage.setItem('accessToken', accessToken);
+
+      // Redirect to the homepage
+      window.location.href = '/homepage.html';
+    }
+  </script>
+</body>
+</html>
+

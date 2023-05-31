@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Homepage</title>
+</head>
+<style>
+    body{
+        background-color: rgba(255, 255, 255, .45);
+        background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, .25),
+    rgba(255, 255, 255, .75), 70%, 
+    rgba(255, 255, 255, .25)
+  );
+    }
+   h1
+   {
+        font-size: 70px;
+        font-weight: 600;
+        background-image: linear-gradient(to bottom left, #553c9a, #ee4b2b);
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(179, 147, 211, 0.1),
+                    3px 4px 4px rgba(179, 147, 211, 0.15),
+                    4px 6px 4px rgba(179, 147, 211, 0.2),
+                    5px 8px 4px rgab(179, 147, 211, 0.25);
+   }
+    /* button
+    {
+       position: relative;
+       border: none;
+       box-shadow: none; 
+        width: 130px;
+        height: 50px;
+        line-height: 42px;
+        -webkit-perspective: 230px;
+        perspective: 230px;
+    }
+    button span
+    {
+        background: rgb(0,172,238);
+        background: linear-gradient(90deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
+        display: block;
+        position: absolute;
+        box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,0.5), inset 7px 7px 20px 0px rgba(0,0,0,0.1),4px 4px 5px 0px rgba(0,0,0,0.1);
+        border-radius: 5px;
+        margin: 0;
+        text-align: center;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    } */
+    button{
+  background: rgb(199, 33, 144);
+  background: linear-gradient(0deg, rgb(218, 92, 218) 0%, rgb(152, 68, 132) 100%);
+  border: none;
+  height: 50px;
+    width: 130px;
+  
+}
+button:before {
+  height: 50px;
+  width: 130px;
+}
+button:hover {
+  box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .5), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.2),
+    inset 4px 4px 6px 0 rgba(0, 0, 0, .4);
+}
+
+
+    
+</style>
+<body>
+  <h1>GitHub Homepage</h1>
+  <div id="repository-count"></div>
+  <button onclick="createRepository()">Create Repository</button>
+  <button onclick="viewRepositories()">View Repositories</button>
+  <button onclick="viewProfile()">View Profile</button>
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    // Function to retrieve the access token from the URL query parameter
+    function getAccessToken() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('token');
+    }
+
+    // Function to set the access token as the Bearer Token in the backend
+    function setBearerToken() {
+      const accessToken = getAccessToken();
+      if (accessToken) {
+        // Set the access token as the Bearer Token header in subsequent API requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      }
+    }
+    // Function to update the repository count
+    function updateRepositoryCount(count) {
+      const repositoryCountElement = document.getElementById('repository-count');
+      repositoryCountElement.textContent = `Repository Count: ${count}`;
+    }
+ 
+// Function to create a repository (POST request)
+function createRepository() {
+  setBearerToken();
+
+  const repositoryName = prompt("Enter the name of the repository:");
+  if (!repositoryName) {
+    console.log('Repository name not provided.');
+    return;
+  }
+  const repositoriesContainer = document.getElementById('repositories-container');
+      repositoriesContainer.innerHTML = '';
+  // Implement your logic to send the create repository request using axios or fetch
+  // Example using axios:
+  axios.post('/auth/create-repo', { name: repositoryName })
+    .then(response => {
+      // Handle the response
+      console.log(response.data);
+
+      // Display a prompt indicating successful repository creation
+      alert('Repository created successfully!');
+    })
+    .catch(error => {
+      // Handle the error
+      console.error(error);
+    });
+}
+
+
+  // Function to view repositories
+function viewRepositories() {
+  setBearerToken();
+  const profileContainer = document.getElementById('profile-container');
+      profileContainer.innerHTML = '';
+  // Implement your logic to send the view repositories request using axios or fetch
+  // Example using axios:
+  axios.get('/repositories')
+    .then(response => {
+      const repositories = response.data.repositoryNames;
+
+      const repositoriesContainer = document.getElementById('repositories-container');
+      repositoriesContainer.innerHTML = '';
+
+      if (!Array.isArray(repositories) || repositories.length === 0) {
+        repositoriesContainer.innerHTML = 'No repositories found.';
+      } else {
+        repositories.forEach(repository => {
+          const repositoryElement = document.createElement('div');
+          repositoryElement.textContent = repository;
+          repositoriesContainer.appendChild(repositoryElement);
+        });
+      }
+    })
+    .catch(error => {
+      // Handle the error
+      console.error(error);
+    });
+}
+
+
+// Function to display profile information on the page
+function displayProfile(profile) {
+  const profileContainer = document.getElementById('profile-container');
+  profileContainer.innerHTML = '';
+
+  const idElement = document.createElement('div');
+  idElement.textContent = `ID: ${profile.id}`;
+  profileContainer.appendChild(idElement);
+
+  const usernameElement = document.createElement('div');
+  usernameElement.textContent = `Username: ${profile.username}`;
+  profileContainer.appendChild(usernameElement);
+}
+
+// Function to view profile information
+function viewProfile() {
+  setBearerToken();
+  // Clear the repositories container
+      const repositoriesContainer = document.getElementById('repositories-container');
+      repositoriesContainer.innerHTML = '';
+
+  // Implement your logic to send the view profile request using axios or fetch
+  // Example using axios:
+  axios.get('/profile')
+    .then(response => {
+      const profile = response.data;
+
+      const profileContainer = document.getElementById('profile-container');
+      profileContainer.innerHTML = '';
+
+      if (profile) {
+        displayProfile(profile);
+      } else {
+        profileContainer.innerHTML = 'No profile found.';
+      }
+    })
+    .catch(error => {
+      // Handle the error
+      console.error(error);
+    });
+}
+
+    // Function to display repositories on the page
+function displayRepositories(repositories) {
+  const repositoriesContainer = document.getElementById('repositories-container');
+  repositoriesContainer.innerHTML = '';
+
+  if (!Array.isArray(repositories)) {
+    repositoriesContainer.innerHTML = 'Error: Unable to retrieve repositories.';
+  } else if (repositories.length === 0) {
+    repositoriesContainer.innerHTML = 'No repositories found.';
+  } else {
+    repositories.forEach(repository => {
+      const repositoryElement = document.createElement('div');
+      repositoryElement.textContent = repository.name;
+      repositoriesContainer.appendChild(repositoryElement);
+    });
+  }
+}
+
+    // Function to display profile information on the page
+    function displayProfile(profile) {
+      const profileContainer = document.getElementById('profile-container');
+      profileContainer.innerHTML = '';
+
+      const usernameElement = document.createElement('div');
+      usernameElement.textContent = `Username: ${profile.username}`;
+      profileContainer.appendChild(usernameElement);
+
+      // Add more profile information elements as needed
+    }
+
+    // Function to logout
+    function logout() {
+      // Clear the access token from localStorage or any other storage mechanism you're using
+      localStorage.removeItem('accessToken');
+
+      // Redirect back to the login page (index.html)
+      window.location.href = '/index.html';
+    }
+   // Function to retrieve and update the repository count
+   function retrieveAndUpdateRepositoryCount() {
+      // Implement your logic to send the repository count request using axios or fetch
+      // Example using axios:
+      axios.get('/repositories/count')
+        .then(response => {
+          const count = response.data.count;
+
+          updateRepositoryCount(count);
+        })
+        .catch(error => {
+          // Handle the error
+          console.error(error);
+        });
+    }
+
+    // Call the setBearerToken function when the page loads
+    setBearerToken();
+    retrieveAndUpdateRepositoryCount();
+  </script>
+
+  <div id="repositories-container"></div>
+  <div id="profile-container"></div>
+</body>
+</html>
