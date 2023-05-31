@@ -23,7 +23,7 @@ $ npm install @nestjs/config
 $ npm install passport @nestjs/passport passport-github
 $ npm install passport-jwt
 $ npm install @nestjs/jwt
-
+```
 ## Running the app
 
 ```bash
